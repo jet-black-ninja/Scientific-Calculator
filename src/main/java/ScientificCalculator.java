@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 class ScientificCalculator {
     JFrame frmCalculator;
-    String result = "";
+    String result = "", expression = "";
     ArrayList<String> token = new ArrayList<String>();
     boolean num = false;
     boolean dot = false;
@@ -28,7 +28,7 @@ class ScientificCalculator {
     }
 
     int precedence (String x){
-        int p = switch (x) {
+        return switch (x) {
             case "+" -> 1;
             case "-" -> 2;
             case "x" -> 3;
@@ -37,7 +37,6 @@ class ScientificCalculator {
             case "!" -> 7;
             default -> 10;
         };
-        return p;
     }
 
     private boolean isOperator(String x){
@@ -120,7 +119,7 @@ class ScientificCalculator {
     }
 
     private  double Eval(String p){
-        String tokens[] = p.split(",");
+        String[] tokens = p.split(",");
         ArrayList<String> token2 = new ArrayList<String>();
         for (String s : tokens) {
             if (!s.isEmpty() && !s.equals(" ") && !s.equals("\n") && !s.equals("  ")) {
@@ -155,19 +154,18 @@ class ScientificCalculator {
         return res;
     }
 
-    //TODO commented for now
-//    private void calculateMain(){
-//        String tokens[]=expression.split(",");
-//        for(String s : tokens){
-//            if(!s.isEmpty() && !s.equals(" ") && !s.equals("\n") && !s.equals("  ") ){
-//                token.add(s);
-//            }
-//        }
-//        try{
-//            double res = Eval(infixToPostfix());
-//            result = Double.toString(res);
-//        }catch(Exception _){}
-//    }
+    private void calculateMain(){
+        String[] tokens =expression.split(",");
+        for(String s : tokens){
+            if(!s.isEmpty() && !s.equals(" ") && !s.equals("\n") && !s.equals("  ") ){
+                token.add(s);
+            }
+        }
+        try{
+            double res = Eval(infixToPostfix());
+            result = Double.toString(res);
+        }catch(Exception _){}
+    }
 
     private void initialize(){
         // make a new JFrame from swing and set its properties
@@ -207,5 +205,153 @@ class ScientificCalculator {
         textField.setBounds(2,30,312,49);
         textPanel.add(textField);
         textField.setColumns(10);
+
+        // make a button panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null , null ,null ,null));
+        buttonPanel.setBackground(SystemColor.inactiveCaptionBorder);
+        buttonPanel.setBounds(34, 120,316,322);
+        frmCalculator.getContentPane().add(buttonPanel);
+        buttonPanel.setLayout(new GridLayout(0,5,0,0));
+
+        //Clear button
+        JButton button1 = new JButton("C");
+        button1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textField.setText("0");
+                exprLabel.setText("");
+                expression = "";
+                token.clear();
+                result = "";
+                num = false;
+                dot = false;
+            }
+        });
+        button1.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        buttonPanel.add(button1);
+
+        JButton button2 = new JButton("DEL");
+        button2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String s = textField.getText();
+                if(s.length() > 1){
+                    String newString = s.substring(0, s.length()-1);
+                    textField.setText(newString);
+                    if(expression.charAt(expression.length()-1) == '.'){
+                        dot = false;
+                    }
+                    if(expression.charAt(expression.length()-1) == ','){
+                        expression = expression.substring(0, expression.length() -2);
+                    } else {
+                        expression = expression.substring(0, expression.length() -1);
+                    }
+                } else {
+                    textField.setText("0");
+                    expression = "";
+                }
+            }
+        });
+
+        //Button for constant PI
+        JButton button3 = new JButton("<html><body><span>π</span></body></html>");
+        button3.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(! "0".equals(expression)){
+                    textField.setText(textField.getText() + Character.toString((char)960));
+                } else {
+                    textField.setText(Character.toString((char)960));
+                }
+                expression +=",pi";
+                num = false;
+                dot = false;
+            }
+        });
+        buttonPanel.add(button3);
+
+        //button for x^y
+        JButton button4 = new JButton("<html><body><span>X<sup>y</sup></span></body></html>");
+        button4.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(! "0".equals(textField.getText())){
+                    textField.setText(textField.getText() + "^");
+                    expression+=",^";
+                } else {
+                    textField.setText("^");
+                    expression += ",0,^";
+                }
+                num = false;
+                dot = false;
+            }
+        });
+        buttonPanel.add(button4);
+        //factorial button
+        JButton button5 = new JButton("x!");
+        button5.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button5.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(! "0".equals(textField.getText())){
+                    textField.setText(textField.getText() + "!");
+                    expression+=",!";
+                } else  {
+                    textField.setText(textField.getText() + "0!");
+                    expression += ",0,!";
+                }
+            }
+        });
+        buttonPanel.add(button5);
+        //sin button
+        JButton button6 = new JButton("sin");
+        button6.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(! "0".equals(textField.getText())){
+                    textField.setText(textField.getText() + "sin(");
+                } else {
+                    textField.setText("sin(");
+                }
+                expression=",sin(";
+                num = false;
+                dot = false;
+            }
+        });
+        buttonPanel.add(button6);
+
+        JButton button7 = new JButton("(");
+        button7.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(! "0".equals(textField.getText())) {
+                    textField.setText(textField.getText()+"(");
+                }else {
+                    textField.setText("(");
+                }
+                expression+=",(";
+                num=false;
+                dot=false;
+            }
+        });
+        button7.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        buttonPanel.add(button7);
+
+        JButton button8 = new JButton(")");
+        button8.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(! "0".equals(textField.getText())) {
+                    textField.setText(textField.getText()+")");
+                }else {
+                    textField.setText(")");
+                }
+                expression+=",)";
+                num=false;
+                dot=false;
+            }
+        });
+        buttonPanel.add(button8);
+
+
+
+        frmCalculator.setBounds(200,100,400,500);
+        frmCalculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
