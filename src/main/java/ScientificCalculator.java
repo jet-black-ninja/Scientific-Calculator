@@ -216,139 +216,339 @@ class ScientificCalculator {
 
         //Clear button
         JButton button1 = new JButton("C");
-        button1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                textField.setText("0");
-                exprLabel.setText("");
-                expression = "";
-                token.clear();
-                result = "";
-                num = false;
-                dot = false;
-            }
+        button1.addActionListener(e -> {
+            textField.setText("0");
+            exprLabel.setText("");
+            expression = "";
+            token.clear();
+            result = "";
+            num = false;
+            dot = false;
         });
         button1.setFont(new Font("Calibri Light", Font.PLAIN, 17));
         buttonPanel.add(button1);
 
         JButton button2 = new JButton("DEL");
-        button2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String s = textField.getText();
-                if(s.length() > 1){
-                    String newString = s.substring(0, s.length()-1);
-                    textField.setText(newString);
-                    if(expression.charAt(expression.length()-1) == '.'){
-                        dot = false;
-                    }
-                    if(expression.charAt(expression.length()-1) == ','){
-                        expression = expression.substring(0, expression.length() -2);
-                    } else {
-                        expression = expression.substring(0, expression.length() -1);
-                    }
-                } else {
-                    textField.setText("0");
-                    expression = "";
+        button2.addActionListener(e -> {
+            String s = textField.getText();
+            if(s.length() > 1){
+                String newString = s.substring(0, s.length()-1);
+                textField.setText(newString);
+                if(expression.charAt(expression.length()-1) == '.'){
+                    dot = false;
                 }
+                if(expression.charAt(expression.length()-1) == ','){
+                    expression = expression.substring(0, expression.length() -2);
+                } else {
+                    expression = expression.substring(0, expression.length() -1);
+                }
+            } else {
+                textField.setText("0");
+                expression = "";
             }
         });
 
         //Button for constant PI
         JButton button3 = new JButton("<html><body><span>π</span></body></html>");
         button3.setFont(new Font("Calibri Light", Font.PLAIN, 17));
-        button3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(! "0".equals(expression)){
-                    textField.setText(textField.getText() + Character.toString((char)960));
-                } else {
-                    textField.setText(Character.toString((char)960));
-                }
-                expression +=",pi";
-                num = false;
-                dot = false;
+        button3.addActionListener(e -> {
+            if(! "0".equals(expression)){
+                textField.setText(textField.getText() + Character.toString((char)960));
+            } else {
+                textField.setText(Character.toString((char)960));
             }
+            expression +=",pi";
+            num = false;
+            dot = false;
         });
         buttonPanel.add(button3);
 
         //button for x^y
         JButton button4 = new JButton("<html><body><span>X<sup>y</sup></span></body></html>");
         button4.setFont(new Font("Calibri Light", Font.PLAIN, 17));
-        button4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(! "0".equals(textField.getText())){
-                    textField.setText(textField.getText() + "^");
-                    expression+=",^";
-                } else {
-                    textField.setText("^");
-                    expression += ",0,^";
-                }
-                num = false;
-                dot = false;
+        button4.addActionListener(e -> {
+            if(! "0".equals(textField.getText())){
+                textField.setText(textField.getText() + "^");
+                expression+=",^";
+            } else {
+                textField.setText("^");
+                expression += ",0,^";
             }
+            num = false;
+            dot = false;
         });
         buttonPanel.add(button4);
         //factorial button
         JButton button5 = new JButton("x!");
         button5.setFont(new Font("Calibri Light", Font.PLAIN, 17));
-        button5.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(! "0".equals(textField.getText())){
-                    textField.setText(textField.getText() + "!");
-                    expression+=",!";
-                } else  {
-                    textField.setText(textField.getText() + "0!");
-                    expression += ",0,!";
-                }
+        button5.addActionListener(e -> {
+            if(! "0".equals(textField.getText())){
+                textField.setText(textField.getText() + "!");
+                expression+=",!";
+            } else  {
+                textField.setText(textField.getText() + "0!");
+                expression += ",0,!";
             }
         });
         buttonPanel.add(button5);
         //sin button
         JButton button6 = new JButton("sin");
         button6.setFont(new Font("Calibri Light", Font.PLAIN, 17));
-        button6.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(! "0".equals(textField.getText())){
-                    textField.setText(textField.getText() + "sin(");
-                } else {
-                    textField.setText("sin(");
-                }
-                expression=",sin(";
-                num = false;
-                dot = false;
+        button6.addActionListener(e -> {
+            if(! "0".equals(textField.getText())){
+                textField.setText(textField.getText() + "sin(");
+            } else {
+                textField.setText("sin(");
             }
+            expression=",sin(";
+            num = false;
+            dot = false;
         });
         buttonPanel.add(button6);
 
         JButton button7 = new JButton("(");
-        button7.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(! "0".equals(textField.getText())) {
-                    textField.setText(textField.getText()+"(");
-                }else {
-                    textField.setText("(");
-                }
-                expression+=",(";
-                num=false;
-                dot=false;
-            }
-        });
         button7.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button7.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"(");
+            }else {
+                textField.setText("(");
+            }
+            expression+=",(";
+            num = false;
+            dot = false;
+        });
         buttonPanel.add(button7);
 
         JButton button8 = new JButton(")");
-        button8.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(! "0".equals(textField.getText())) {
-                    textField.setText(textField.getText()+")");
-                }else {
-                    textField.setText(")");
-                }
-                expression+=",)";
-                num=false;
-                dot=false;
+        button8.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button8.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+")");
+            }else {
+                textField.setText(")");
             }
+            expression+=",)";
+            num = false;
+            dot = false;
         });
         buttonPanel.add(button8);
+        // exponential button
+        JButton button9 = new JButton("e");
+        button9.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button9.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"e");
+            }else{
+                textField.setText("e");
+            }
+            expression+=",e";
+            num = false;
+            dot = false;
+        });
+        buttonPanel.add(button9);
+        //sqrt button
+        JButton button10 = new JButton("<html><body><span>√</span></body></html>");
+        button10.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button10.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+Character.toString((char)8730));
+            } else {
+                textField.setText(Character.toString((char)8730));
+            }
+            expression +=",sqrt";
+            num = false;
+            dot = false;
+        });
+        buttonPanel.add(button10);
+        //cos button
+        JButton button11 = new JButton("cos");
+        button11.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button11.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"cos(");
+            }else {
+                textField.setText("cos(");
+            }
+            expression+=",cos,(";
+            num=false;
+            dot=false;
+        });
+        buttonPanel.add(button11);
 
+        JButton button12 = new JButton("7");
+        button12.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button12.setBackground(new Color(220,220,220));
+        button12.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"7");
+            }else {
+                textField.setText("7");
+            }
+            if(num){
+                expression+="7";
+            }else{
+                expression+=",7";
+            }
+            num= true;
+        });
+        buttonPanel.add(button12);
+
+        JButton button13 = new JButton("8");
+        button13.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button13.setBackground(new Color(220,220,220));
+        button13.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"8");
+            }else {
+                textField.setText("8");
+            }
+            if(num) {
+                expression+="8";
+            }else {
+                expression+=",8";
+            }
+            num=true;
+        });
+        buttonPanel.add(button13);
+
+        JButton button14 = new JButton("9");
+        button14.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button14.setBackground(new Color(220,220,220));
+        button14.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"9");
+            }else {
+                textField.setText("9");
+            }
+            if(num) {
+                expression+="9";
+            }else {
+                expression+=",9";
+            }
+            num=true;
+        });
+        buttonPanel.add(button14);
+        // division sign
+        JButton button15 = new JButton("<html><body><span>÷</span></body></html>");
+        button15.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button15.addActionListener(e -> {
+            String s = textField.getText();
+            if(s.equals("0")){
+                expression+="0";
+            }
+            if(s.charAt(s.length()-1)=='-' || s.charAt(s.length()-1) == 'x' || s.charAt(s.length()-1) == '+'){
+                String newString = s.substring(0, s.length()-1);
+                textField.setText(newString + Character.toString((char)247));
+                expression = expression.substring(0, expression.length()-1);
+                expression+='/';
+            }else if(s.charAt(s.length()-1 ) != (char)247){
+                textField.setText(s+Character.toString((char)247));
+                expression +='/';
+            }else {
+                textField.setText(s);
+            }
+            num = false;
+            dot = false;
+        });
+        buttonPanel.add(button15);
+
+        //tan button
+        JButton button16 = new JButton("tan");
+        button16.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button16.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"tan");
+            }else {
+                textField.setText("tan");
+            }
+            expression+=",tan";
+            num = false;
+            dot = false;
+        });
+        buttonPanel.add(button16);
+
+        JButton button17 = new JButton("4");
+        button17.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button17.setBackground(new Color(220,220,220));
+        button17.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"4");
+            } else {
+                textField.setText("4");
+            }
+            if(num){
+                expression+="4";
+            }else{
+                expression+=",4";
+            }
+            num = true;
+            dot = false;
+        });
+        buttonPanel.add(button17);
+
+        JButton button18 = new JButton("5");
+        button18.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button18.setBackground(new Color(220,220,220));
+        button18.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"5");
+            }else{
+                textField.setText("5");
+            }
+            if(num){
+                expression+="5";
+            }else{
+                expression+=",5";
+            }
+            num = true;
+            dot = false;
+        });
+        buttonPanel.add(button18);
+
+        JButton button19 = new JButton("6");
+        button19.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button19.setBackground(new Color(220,220,220));
+        button19.addActionListener(e -> {
+            if(! "0".equals(textField.getText())) {
+                textField.setText(textField.getText()+"6");
+            }else {
+                textField.setText("6");
+            }
+            if(num){
+                expression+="6";
+            }else{
+                expression+=",6";
+            }
+            num = true;
+            dot = false;
+        });
+        buttonPanel.add(button19);
+
+        JButton button20 = new JButton("x");
+        button20.setFont(new Font("Calibri Light", Font.PLAIN, 17));
+        button20.addActionListener(e -> {
+            String s = textField.getText();
+            if(s.equals("0")){
+                expression+="0";
+            }
+            if(s.charAt(s.length()-1)=='-' || s.charAt(s.length()-1) == '+' || s.charAt(s.length()-2) == (char)(247)){
+                String newString = s.substring(0, s.length()-1);
+                newString += "x";
+                textField.setText(newString);
+                expression = expression.substring(0, expression.length()-1);
+                expression +="x";
+            }else if(s.charAt(s.length()-1 ) != 'x'){
+                s+="x";
+                textField.setText(s);
+                expression += ",x";
+            }else {
+                textField.setText(s);
+            }
+            num = false;
+            dot = false;
+        });
+        buttonPanel.add(button20);
 
 
         frmCalculator.setBounds(200,100,400,500);
