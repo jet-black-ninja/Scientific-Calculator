@@ -3,6 +3,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
 class ScientificCalculator {
     JFrame frmCalculator;
     String result = "", expression = "";
@@ -47,47 +48,49 @@ class ScientificCalculator {
         Stack<String> s = new Stack<String>();
         String y;
         int flag;
-        StringBuilder p = new StringBuilder();
+        String p="";
         token.add(")");
         s.push("(");
-        for(String i : token){
+        for(String i: token) {
             if(i.equals("(")){
                 s.push(i);
-            } else if(i.equals(")")){
-                y = s.pop();
-                while(!y.equals("(")){
-                    p.append(y).append(",");
-                    y = s.pop();
+            }else if(i.equals(")")){
+                y=s.pop();
+                while(!y.equals("("))
+                {
+                    p=p+y+",";
+                    y=s.pop();
                 }
-            } else if(isOperator(i)) {
-                y = s.pop();
-                flag = 0;
-                if(isOperator(y) && precedence(y)> precedence(i)){
-                    p.append(y).append(",");
-                    flag = 1;
+            }else if(isOperator(i)){
+                y=s.pop();
+                flag=0;
+                if(isOperator(y) && precedence(y)>precedence(i)){
+                    p += y+",";
+                    flag=1;
                 }
-                if(flag == 0){
+                if(flag==0)
                     s.push(y);
-                }
-            }else {
-                p.append(i).append(",");
+
+                s.push(i);
+            }else{
+                p += i+",";
             }
         }
-        while(!s.empty()){
-            y = s.pop();
-            if(!y.equals("(") && !y.equals(")")){
-                p.append(y).append(",");
+        while(!s.empty()) {
+            y=s.pop();
+            if(!y.equals("(") && !y.equals(")")) {
+                p += y+",";
             }
         }
-        return p.toString();
+        return p;
     }
 
     private double factorial(double y) {
         double fact = 1;
         if (y == 0 || y == 1) {
-            return 1;
+            fact = 1;
         } else {
-            for(int i = 0 ; i<= y ; i++){
+            for(int i = 2 ; i<= y ; i++){
                 fact *=i;
             }
         }
@@ -119,26 +122,29 @@ class ScientificCalculator {
     }
 
     private  double Eval(String p){
-        String[] tokens = p.split(",");
-        ArrayList<String> token2 = new ArrayList<String>();
-        for (String s : tokens) {
-            if (!s.isEmpty() && !s.equals(" ") && !s.equals("\n") && !s.equals("  ")) {
-                token2.add(s);
+        String tokens[] = p.split(",");
+        ArrayList<String> token2=new ArrayList<String>();
+        for (String string : tokens) {
+            if (!string.equals("") && !string.equals(" ") && !string.equals("\n") && !string.equals("  ")) {
+                token2.add(string);  // tokens from post fix form p actual tokens for calculation
             }
         }
-        Stack<Double> s = new Stack<Double>();
-        double x, y;
-        for(String i : token2) {
-            if (isOperator(i)){
-                if (i.equals("sin") || i.equals("cos") || i.equals("tan") || i.equals("log") || i.equals("ln") || i.equals("sqrt") || i.equals("!")) {
-                    y = s.pop();
-                    s.push(calculate(y, i));
-                } else {
-                    y = s.pop();
-                    x = s.pop();
-                    s.push(calculate(x, y, i));
+
+        Stack<Double> s=new Stack<Double>();
+        double x,y;
+        for(String  i:token2) {
+            if(isOperator(i)){
+                //if it is unary operator or function
+                if(i.equals("sin") ||i.equals("cos") ||i.equals("tan") ||i.equals("log") || i.equals("ln") || i.equals("sqrt") || i.equals("!")) {
+                    y=s.pop();
+                    s.push(calculate(y,i));
+                }else {
+                    //for binary operators
+                    y=s.pop();
+                    x=s.pop();
+                    s.push(calculate(x,y,i));
                 }
-            } else {
+            }else{
                 if(i.equals("pi"))
                     s.push(Math.PI);
                 else if(i.equals("e"))
@@ -148,10 +154,10 @@ class ScientificCalculator {
             }
         }
         double res = 1;
-        while(!s.empty()){
-            res *= s.pop();
+        while(!s.empty()) {
+            res*=s.pop();
         }
-        return res;
+        return res;//final result
     }
 
     private void calculateMain(){
@@ -302,7 +308,7 @@ class ScientificCalculator {
             } else {
                 textField.setText("sin(");
             }
-            expression=",sin(";
+            expression+=",sin,(";
             num = false;
             dot = false;
         });
@@ -464,7 +470,7 @@ class ScientificCalculator {
             }else {
                 textField.setText("tan");
             }
-            expression+=",tan";
+            expression+=",tan,(";
             num = false;
             dot = false;
         });
